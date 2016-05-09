@@ -47,7 +47,6 @@ public class GameInfo {
 		}
 	}
 
-	//������
 	public GameInfo(GameInfo info) {
 		this.turns = info.turns;
 		this.side = info.side;
@@ -61,7 +60,6 @@ public class GameInfo {
 		this.field = info.field;
 	}
 
-	//����������ȡ��Ϸ��ʼ��Ϣ���ҽ���acknowledge response
 	public GameInfo() {
 		GameInfo.stdReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -93,7 +91,6 @@ public class GameInfo {
 		System.out.println("0");
 	}
 
-	//�����С���ȡSystem��������Ϣ������[����comments] + �ָ���
 	public String[] read() {
 		String line = "";
 		try {
@@ -106,8 +103,6 @@ public class GameInfo {
 		return line.split("\\s");
 	}
 
-	//��ȡ�غ���Ϣ(turn��ʾ�����ǵڼ��غϣ�curePeriod��ʾ����ʱ�仹�ж��ٸ��غ�
-	//samuraiInfo.curX��samuraiInfo.curY��samuraiInfo.hidden�ֱ��ʾ��ʿ��X���꣬Y������Ƿ�����)
 	public void readTurnInfo() {
 		String[] res = this.read();
 
@@ -144,7 +139,6 @@ public class GameInfo {
 		}
 	}
 
-	//�ж���ʿ�Ķ����Ƿ���Ч
 	public Boolean isValid(int action) {
 		SamuraiInfo myself = this.samuraiInfo[this.weapon];
 		int curX = myself.curX;
