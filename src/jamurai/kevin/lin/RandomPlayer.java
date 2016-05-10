@@ -25,7 +25,12 @@ public class RandomPlayer extends Player {
 				}
 			}
 
-			if(this.evaluate(infoCopy, info) >= -400000){
+			int action1Grade = this.evaluate(infoCopy);
+
+			if((-600000 <= action1Grade && action1Grade <= -400000) || (400000 <= action1Grade && action1Grade <= 600000) || (1400000 <= action1Grade && action1Grade <= 1600000) || (2400000 <= action1Grade && action1Grade <= 2600000)){
+				action1.remove(i);
+				i--;
+			}else{
 				ArrayList<ArrayList<Integer>> action2 = possibleAction(infoCopy);
 				grades.add(new ArrayList<Integer>());
 
@@ -38,11 +43,8 @@ public class RandomPlayer extends Player {
 						}
 					}
 
-					grades.get(grades.size() - 1).add(this.evaluate(infoCopyCopy, info));
+					grades.get(grades.size() - 1).add(this.evaluate(infoCopyCopy));
 				}
-			}else{
-				action1.remove(i);
-				i--;
 			}
 		}
 
@@ -64,11 +66,7 @@ public class RandomPlayer extends Player {
 		return new GameInfo(info);
 	}
 
-	public int evaluate(GameInfo afterInfo, GameInfo beforeInfo){
-		return  this.situationAnalyse(afterInfo) - situationAnalyse(beforeInfo);
-	}
-
-	public int situationAnalyse(GameInfo info) {
+	public int evaluate(GameInfo info) {
 		int result = 0;
 		int[] size = { 13, 7, 6 };
 		int[][] ox = { {-1, -1, -1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 0, 0, 1, 1, 2 }, { -1, 0, 0, 0, 1, 1 } };
