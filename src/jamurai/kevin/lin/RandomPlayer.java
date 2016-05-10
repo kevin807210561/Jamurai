@@ -12,54 +12,31 @@ public class RandomPlayer extends Player {
 	}
 
 	public GameInfo play(GameInfo info) {
-		ArrayList<ArrayList<Integer>> action1 = possibleAction(info);
-		ArrayList<ArrayList<Integer>> grades = new ArrayList<ArrayList<Integer>>(action1.size());
-		int[] index = {0, 0};
+		ArrayList<ArrayList<Integer>> action = possibleAction(info);
+		int[] grade = new int[action.size()];
+		int bestOne = 0;
 
-		for (int i = 0; i < action1.size(); i++) {
+		for(int i = 0; i < action.size(); i++){
 			GameInfo infoCopy = new GameInfo(info, true);
 
-			for (int j = 0; j < action1.get(i).size(); j++) {
-				if (infoCopy.isValid(action1.get(i).get(j))) {
-					infoCopy.virtualDoAction(action1.get(i).get(j));
+			for(int j = 0; j < action.get(i).size(); j++){
+				if(infoCopy.isValid(action.get(i).get(j))){
+					infoCopy.virtualDoAction(action.get(i).get(j));
 				}
 			}
 
-			int action1Grade = this.evaluate(infoCopy);
+			grade[i] = evaluate(infoCopy);
+		}
 
-			if((-600000 <= action1Grade && action1Grade <= -400000) || (400000 <= action1Grade && action1Grade <= 600000) || (1400000 <= action1Grade && action1Grade <= 1600000) || (2400000 <= action1Grade && action1Grade <= 2600000)){
-				action1.remove(i);
-				i--;
-			}else{
-				ArrayList<ArrayList<Integer>> action2 = possibleAction(infoCopy);
-				grades.add(new ArrayList<Integer>());
-
-				for (int j = 0; j < action2.size(); j++) {
-					GameInfo infoCopyCopy = new GameInfo(infoCopy, true);
-
-					for (int k = 0; k < action2.get(j).size(); k++) {
-						if (infoCopyCopy.isValid(action2.get(j).get(k))) {
-							infoCopyCopy.virtualDoAction(action2.get(j).get(k));
-						}
-					}
-
-					grades.get(grades.size() - 1).add(this.evaluate(infoCopyCopy));
-				}
+		for(int i = 0; i < grade.length; i++){
+			if(grade[i] > grade[bestOne]){
+				bestOne = i;
 			}
 		}
 
-		for (int i = 0; i < grades.size(); i++) {
-			for (int j = 0; j < grades.get(i).size(); j++) {
-				if (grades.get(i).get(j) > grades.get(index[0]).get(index[1])) {
-					index[0] = i;
-					index[1] = j;
-				}
-			}
-		}
-
-		for(int i = 0; i < action1.get(index[0]).size(); i++){
-			if(info.isValid(action1.get(index[0]).get(i))){
-				info.doAction(action1.get(index[0]).get(i));
+		for(int i = 0; i < action.get(bestOne).size(); i++){
+			if(info.isValid(action.get(bestOne).get(i))){
+				info.doAction(action.get(bestOne).get(i));
 			}
 		}
 
