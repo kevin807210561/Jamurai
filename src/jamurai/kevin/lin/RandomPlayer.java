@@ -12,38 +12,63 @@ public class RandomPlayer extends Player {
 	}
 
 	public GameInfo play(GameInfo info) {
-		ArrayList<ArrayList<Integer>> action = possibleAction(info);
-		int[] grade = new int[action.size()];
-		int bestOne = 0;
-		
-		for(int i = 0; i < action.size(); i++){
+		ArrayList<ArrayList<Integer>> action1 = possibleAction(info);
+		ArrayList<ArrayList<Integer>> grades = new ArrayList<ArrayList<Integer>>(action1.size());
+		int[] index = {0, 0};
+
+		for (int i = 0; i < action1.size(); i++) {
 			GameInfo infoCopy = new GameInfo(info, true);
-			
-			for(int j = 0; j < action.get(i).size(); j++){
-				if(infoCopy.isValid(action.get(i).get(j))){
-					infoCopy.virtualDoAction(action.get(i).get(j));
+
+			for (int j = 0; j < action1.get(i).size(); j++) {
+				if (infoCopy.isValid(action1.get(i).get(j))) {
+					infoCopy.virtualDoAction(action1.get(i).get(j));
 				}
 			}
-			
-			grade[i] = evaluate(infoCopy);
-		}
-		
-		for(int i = 0; i < grade.length; i++){
-			if(grade[i] > grade[bestOne]){
-				bestOne = i;
+
+			if(this.evaluate(infoCopy, info) >= -400000){
+				ArrayList<ArrayList<Integer>> action2 = possibleAction(infoCopy);
+				grades.add(new ArrayList<Integer>());
+
+				for (int j = 0; j < action2.size(); j++) {
+					GameInfo infoCopyCopy = new GameInfo(infoCopy, true);
+
+					for (int k = 0; k < action2.get(j).size(); k++) {
+						if (infoCopyCopy.isValid(action2.get(j).get(k))) {
+							infoCopyCopy.virtualDoAction(action2.get(j).get(k));
+						}
+					}
+
+					grades.get(grades.size() - 1).add(this.evaluate(infoCopyCopy, info));
+				}
+			}else{
+				action1.remove(i);
+				i--;
 			}
 		}
-		
-		for(int i = 0; i < action.get(bestOne).size(); i++){
-			if(info.isValid(action.get(bestOne).get(i))){
-				info.doAction(action.get(bestOne).get(i));
+
+		for (int i = 0; i < grades.size(); i++) {
+			for (int j = 0; j < grades.get(i).size(); j++) {
+				if (grades.get(i).get(j) > grades.get(index[0]).get(index[1])) {
+					index[0] = i;
+					index[1] = j;
+				}
+			}
+		}
+
+		for(int i = 0; i < action1.get(index[0]).size(); i++){
+			if(info.isValid(action1.get(index[0]).get(i))){
+				info.doAction(action1.get(index[0]).get(i));
 			}
 		}
 
 		return new GameInfo(info);
 	}
 
-	public int evaluate(GameInfo info) {
+	public int evaluate(GameInfo afterInfo, GameInfo beforeInfo){
+		return  this.situationAnalyse(afterInfo) - situationAnalyse(beforeInfo);
+	}
+
+	public int situationAnalyse(GameInfo info) {
 		int result = 0;
 		int[] size = { 13, 7, 6 };
 		int[][] ox = { {-1, -1, -1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 0, 0, 1, 1, 2 }, { -1, 0, 0, 0, 1, 1 } };
@@ -52,7 +77,7 @@ public class RandomPlayer extends Player {
 		for (int enemy = 3; enemy < GameInfo.PLAYER_NUM; enemy++) {
 			if (info.samuraiInfo[enemy].curX == info.samuraiInfo[enemy].homeX
 					&& info.samuraiInfo[enemy].curY == info.samuraiInfo[enemy].homeY) {
-				result = result + 100000;
+				result = result + 1000000;
 			}
 
 			for (int direction = 0; direction < 4; direction++) {
@@ -69,7 +94,7 @@ public class RandomPlayer extends Player {
 						}
 						if (!isHome) {
 							if(info.samuraiInfo[info.weapon].curX == pos[0] && info.samuraiInfo[info.weapon].curY == pos[1]){
-								result = result - 50000;
+								result = result - 500000;
 							}
 						}
 					}
