@@ -171,9 +171,7 @@ public class RandomPlayer extends Player {
 						}
 						if (!isHome) {
 							if(info.samuraiInfo[info.weapon].curX == pos[0] && info.samuraiInfo[info.weapon].curY == pos[1]){
-								if(info.samuraiInfo[info.weapon].hidden == 0){
-									result = result - 50000;
-								}
+								result = result - 50000;
 							}
 						}
 					}
@@ -185,9 +183,6 @@ public class RandomPlayer extends Player {
 			for (int j = 0; j < info.width; j++) {
 				if (0 <= info.field[i][j] && info.field[i][j] <= 2) {
 					result = result + 500;
-				}
-				if (3 <= info.field[i][j] && info.field[i][j] <= 5) {
-					result = result - 500;
 				}
 			}
 		}
