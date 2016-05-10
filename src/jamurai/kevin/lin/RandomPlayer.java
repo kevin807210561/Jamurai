@@ -12,7 +12,7 @@ public class RandomPlayer extends Player {
 	}
 
 	public GameInfo play(GameInfo info) {
-		ArrayList<ArrayList<Integer>> action = possibleAction();
+		ArrayList<ArrayList<Integer>> action = possibleAction(info);
 		int[] grade = new int[action.size()];
 		int bestOne = 0;
 		
@@ -194,7 +194,7 @@ public class RandomPlayer extends Player {
 		return result;
 	}
 
-	public ArrayList<ArrayList<Integer>> possibleAction() {
+	public ArrayList<ArrayList<Integer>> possibleAction(GameInfo info) {
 		ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>(2000);
 
 		for (int i = 1; i <= 10; i++) {
@@ -244,6 +244,31 @@ public class RandomPlayer extends Player {
 			if (allCost <= maxPower) {
 				result.add(new ArrayList<Integer>());
 				result.get(result.size() - 1).add(i);
+			}
+		}
+
+		for(int i = 0; i < result.size() - 1; i++){
+			GameInfo infoCopy1 = new GameInfo(info, true);
+
+			for (int k = 0; k < result.get(i).size(); k++) {
+				if (infoCopy1.isValid(result.get(i).get(k))) {
+					infoCopy1.virtualDoAction(result.get(i).get(k));
+				}
+			}
+
+			for(int j = i + 1; j < result.size(); j++){
+				GameInfo infoCopy2 = new GameInfo(info, true);
+
+				for (int k = 0; k < result.get(j).size(); k++) {
+					if (infoCopy2.isValid(result.get(j).get(k))) {
+						infoCopy2.virtualDoAction(result.get(j).get(k));
+					}
+				}
+
+				if(infoCopy1.isSameAs(infoCopy2)){
+					result.remove(j);
+					j--;
+				}
 			}
 		}
 
