@@ -11,13 +11,13 @@ public class RandomPlayer extends Player {
 		this.rnd = new Random();
 	}
 
-	public GameInfo play(GameInfo curInfo, GameInfo preInfo) {
-		ArrayList<ArrayList<Integer>> action = possibleAction(curInfo);
+	public GameInfo play(GameInfo Info) {
+		ArrayList<ArrayList<Integer>> action = possibleAction(Info);
 		int[] grade = new int[action.size()];
 		int bestOne = 0;
 
 		for(int i = 0; i < action.size(); i++){
-			GameInfo infoCopy = new GameInfo(curInfo, true);
+			GameInfo infoCopy = new GameInfo(Info, true);
 
 			for(int j = 0; j < action.get(i).size(); j++){
 				if(infoCopy.isValid(action.get(i).get(j))){
@@ -35,12 +35,12 @@ public class RandomPlayer extends Player {
 		}
 
 		for(int i = 0; i < action.get(bestOne).size(); i++){
-			if(curInfo.isValid(action.get(bestOne).get(i))){
-				curInfo.doAction(action.get(bestOne).get(i));
+			if(Info.isValid(action.get(bestOne).get(i))){
+				Info.doAction(action.get(bestOne).get(i));
 			}
 		}
 
-		return new GameInfo(curInfo);
+		return new GameInfo(Info);
 	}
 
 	public int evaluate(GameInfo info) {
