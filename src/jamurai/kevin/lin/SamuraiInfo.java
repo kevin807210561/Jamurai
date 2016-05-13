@@ -17,7 +17,7 @@ public class SamuraiInfo {
         this.rank = 0;
         this.score = 0;
         this.hidden = 0;
-        this.possibleX = null;
-        this.possibleY = null;
+        this.possibleX = new ArrayList<>();
+        this.possibleY = new ArrayList<>();
     }
 }
