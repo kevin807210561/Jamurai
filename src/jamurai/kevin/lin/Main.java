@@ -10,17 +10,19 @@ public class Main {
 
         curInfo.readTurnInfo();
         preInfo = new GameInfo(curInfo, true);
+        EnemyLocaInferer.infer(curInfo, preInfo);
 
         while (true) {
             System.out.println("# Turn " + curInfo.turn);
             if (curInfo.curePeriod != 0) {
                 System.out.println("0");
             } else {
-                p.play(curInfo, preInfo);
+                p.play(curInfo);
                 System.out.println("0");
             }
             preInfo = new GameInfo(curInfo, true);
             curInfo.readTurnInfo();
+            EnemyLocaInferer.infer(curInfo, preInfo);
         }
     }
 }
