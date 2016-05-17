@@ -4,12 +4,12 @@ import com.sun.org.apache.bcel.internal.generic.GOTO;
 
 import java.util.*;
 
-public class RandomPlayer extends Player {
+public class Kevin807210561 extends Player {
 	public final int[] cost = { 0, 4, 4, 4, 4, 2, 2, 2, 2, 1, 1 };
 	public final int maxPower = 7;
 	public Random rnd;
 
-	public RandomPlayer() {
+	public Kevin807210561() {
 		this.rnd = new Random();
 	}
 
@@ -95,6 +95,16 @@ public class RandomPlayer extends Player {
 			}
 			if (counter > 1){
 				result = result - counter * 500000 + 500000;
+			}
+
+			if (info.weapon == 0){
+				if (enemy == 5){
+					int x = info.samuraiInfo[info.weapon].curX - info.samuraiInfo[enemy].curX;
+					int y = info.samuraiInfo[info.weapon].curY - info.samuraiInfo[enemy].curY;
+					if (Math.abs(x) == 3 && y == 0){
+						result = result + 10000;
+					}
+				}
 			}
 		}
 
