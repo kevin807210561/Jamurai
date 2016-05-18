@@ -47,6 +47,7 @@ public class Kevin807210561 extends Player {
 
 	public int evaluate(GameInfo info) {
 		int result = 0;
+		int[] distance = {0, 3, 4};
 		int[] size = { 13, 7, 6 };
 		int[][] ox = { {-1, -1, -1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 0, 0, 1, 1, 2 }, { -1, 0, 0, 0, 1, 1 } };
 		int[][] oy = { {2, 3, 4, 0, 1, 2, 3, 4, 5, 1, 2, 3, 4 }, { 0, 1, 2, 3, 1, 2, 1 }, { 2, 0, 1, 2, 1, 2 } };
@@ -98,10 +99,10 @@ public class Kevin807210561 extends Player {
 			}
 
 			if (info.weapon == 0){
-				if (enemy == 5){
+				if (enemy > 3){
 					int x = info.samuraiInfo[info.weapon].curX - info.samuraiInfo[enemy].curX;
 					int y = info.samuraiInfo[info.weapon].curY - info.samuraiInfo[enemy].curY;
-					if (Math.abs(x) == 3 && y == 0){
+					if (Math.max(Math.abs(x), Math.abs(y)) == distance[enemy - 3] && Math.min(Math.abs(x), Math.abs(y)) == 0 && info.samuraiInfo[info.weapon].hidden == 1){
 						result = result + 10000;
 					}
 				}
