@@ -11,7 +11,7 @@ public class EnemyLocaInferer {
         int[] size = {4, 5, 7};
         int[][] ox = {{0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 2, 0, 0}, {-1, -1, -1, 0, 1, 1, 1}};
         int[][] oy = {{1, 2, 3, 4}, {1, 2, 0, 1, 0}, {-1, 0, 1, 1, 1, -1, 0}};
-        for (int enemy = 3; enemy < 6; enemy++) {
+        for (int  enemy = 3; enemy < 6; enemy++) {
             for (int i = 0; i < curInfo.samuraiInfo[enemy].possibleX.size(); i++) {
                 curInfo.samuraiInfo[enemy].possibleX.remove(i);
                 curInfo.samuraiInfo[enemy].possibleY.remove(i);
@@ -30,6 +30,9 @@ public class EnemyLocaInferer {
                 }
 
                 if (canInfer) {
+                    ArrayList<Integer> tempPossibleX = new ArrayList<>();
+                    ArrayList<Integer> tempPossibleY = new ArrayList<>();
+
                     for (int i = 0; i < curInfo.height; i++) {
                         for (int j = 0; j < curInfo.width; j++) {
                             //if (curInfo.field[i][j] != 9){
@@ -71,7 +74,6 @@ public class EnemyLocaInferer {
 
                                             if (curInfo.field[pos[1]][pos[0]] != enemy && curInfo.field[pos[1]][pos[0]] != 9) {
                                                 allEnemyAndNine = false;
-                                                break;
                                             }
                                         }
                                     }
@@ -86,6 +88,10 @@ public class EnemyLocaInferer {
                                 if (isPossible) {
                                     curInfo.samuraiInfo[enemy].possibleX.add(j);
                                     curInfo.samuraiInfo[enemy].possibleY.add(i);
+                                }
+                                if(containAllDiffs){
+                                    tempPossibleX.add(j);
+                                    tempPossibleY.add(i);
                                     break;
                                 }
                             }
@@ -93,11 +99,36 @@ public class EnemyLocaInferer {
                         }
                     }
 
-                    if (curInfo.samuraiInfo[enemy].possibleX.size() == 1 && preInfo.samuraiInfo[enemy].curX != -1 && (preInfo.samuraiInfo[enemy].curX != curInfo.samuraiInfo[enemy].possibleX.get(0) || preInfo.samuraiInfo[enemy].curY != curInfo.samuraiInfo[enemy].possibleY.get(0))) {
-                        curInfo.samuraiInfo[enemy].curX = curInfo.samuraiInfo[enemy].possibleX.get(0);
-                        curInfo.samuraiInfo[enemy].curY = curInfo.samuraiInfo[enemy].possibleY.get(0);
-                        curInfo.samuraiInfo[enemy].possibleX.remove(0);
-                        curInfo.samuraiInfo[enemy].possibleY.remove(0);
+                    if(curInfo.samuraiInfo[enemy].possibleX.size() == 0){
+                        for (int i = 0; i < tempPossibleX.size(); i++) {
+                            curInfo.samuraiInfo[enemy].possibleX.add(tempPossibleX.get(i));
+                            curInfo.samuraiInfo[enemy].possibleY.add(tempPossibleY.get(i));
+                        }
+                    }
+
+                    if (curInfo.samuraiInfo[enemy].possibleX.size() == 1){
+                        if (preInfo.samuraiInfo[enemy].curX != -1 && (preInfo.samuraiInfo[enemy].curX != curInfo.samuraiInfo[enemy].possibleX.get(0) || preInfo.samuraiInfo[enemy].curY != curInfo.samuraiInfo[enemy].possibleY.get(0))) {
+                            curInfo.samuraiInfo[enemy].curX = curInfo.samuraiInfo[enemy].possibleX.get(0);
+                            curInfo.samuraiInfo[enemy].curY = curInfo.samuraiInfo[enemy].possibleY.get(0);
+                            curInfo.samuraiInfo[enemy].possibleX.remove(0);
+                            curInfo.samuraiInfo[enemy].possibleY.remove(0);
+                        }
+
+                        if(preInfo.samuraiInfo[enemy].curX == -1){
+                            curInfo.samuraiInfo[enemy].curX = curInfo.samuraiInfo[enemy].possibleX.get(0);
+                            curInfo.samuraiInfo[enemy].curY = curInfo.samuraiInfo[enemy].possibleY.get(0);
+                            curInfo.samuraiInfo[enemy].possibleX.remove(0);
+                            curInfo.samuraiInfo[enemy].possibleY.remove(0);
+                        }
+                    }
+
+                    for (int i = 0; i < curInfo.samuraiInfo[enemy].possibleX.size(); i++) {
+                        int x = curInfo.samuraiInfo[enemy].possibleX.get(i);
+                        int y = curInfo.samuraiInfo[enemy].possibleY.get(i);
+                        if(curInfo.field[y][x] == 8 || curInfo.field[y][x] < 3){
+                            curInfo.samuraiInfo[enemy].possibleX.remove(i);
+                            curInfo.samuraiInfo[enemy].possibleY.remove(i);
+                        }
                     }
                 }
             }
