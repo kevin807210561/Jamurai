@@ -331,41 +331,4 @@ public class GameInfo {
         myself.curY = curY;
         this.samuraiInfo[this.weapon] = myself;
     }
-
-    public boolean isSameAs(GameInfo info) {
-        boolean result;
-        boolean result1 = false;
-        boolean result2 = true;
-        boolean result3 = true;
-
-        if (this.turns == info.turns && this.side == info.side && this.weapon == info.weapon && this.width == info.width
-                && this.height == info.height && this.maxCure == info.maxCure && this.turn == info.turn
-                && this.curePeriod == info.curePeriod) {
-            result1 = true;
-        }
-
-        for (int i = 0; i < GameInfo.PLAYER_NUM; i++) {
-            if (this.samuraiInfo[i].homeX != info.samuraiInfo[i].homeX
-                    || this.samuraiInfo[i].homeY != info.samuraiInfo[i].homeY
-                    || this.samuraiInfo[i].curX != info.samuraiInfo[i].curX
-                    || this.samuraiInfo[i].curY != info.samuraiInfo[i].curY
-                    || this.samuraiInfo[i].rank != info.samuraiInfo[i].rank
-                    || this.samuraiInfo[i].score != info.samuraiInfo[i].score
-                    || this.samuraiInfo[i].hidden != info.samuraiInfo[i].hidden) {
-                result2 = false;
-            }
-        }
-
-        for (int i = 0; i < info.height; i++) {
-            for (int j = 0; j < info.width; j++) {
-                if (this.field[i][j] != info.field[i][j]) {
-                    result3 = false;
-                }
-            }
-        }
-
-        result = result1 && result2 && result3;
-
-        return result;
-    }
 }
